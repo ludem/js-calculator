@@ -1,0 +1,21 @@
+<script>
+const add = x => y => x + y;
+const multiply = x => y => x * y;
+const substract = x => y => y - x
+const divide = x => y => y / x;
+
+const compose = f => g => f(g);
+
+const operations = [];
+
+operations.push(add(20), substract(1), multiply(2), divide(2));
+
+const compute= array => array.reduce((total, x) => compose(x)(total), 0);
+
+console.log(compute(operations));
+
+operations.pop();
+
+console.log(compute(operations));
+
+</script>
