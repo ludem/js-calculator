@@ -9,7 +9,7 @@
 
 <body>
     <p id="mainDisplay">0</p>
-    <p id="subDisplay"></p>
+    <p id="subDisplay">0</p>
     <div class="key number">1</div>
     <div class="key number">2</div>
     <div class="key number">3</div>
@@ -25,6 +25,8 @@
     <div class="key operator">:</div>
     <div class="key operator">x</div>
     <div class="key equal">=</div>
+    <div class="key ac">AC</div>
+    <div class="key ce">CE</div>
 
 </body>
 
@@ -55,6 +57,8 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
     const numberKeys = document.querySelectorAll('.number');
     const operatorKeys = document.querySelectorAll('.operator');
     const equalKey = document.querySelector('.equal');
+    const ACkey = document.querySelector('.ac');
+    const CEkey = document.querySelector('.ce');
 
     const operatorRegExp = /[+\-:x]$/;
 
@@ -62,11 +66,21 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
     numberKeys.forEach(x => x.addEventListener('click', handleNumericKeyPress));
     operatorKeys.forEach(x => x.addEventListener('click', handleOperatorKeyPress));
     equalKey.addEventListener('click', handleEqualKeyPress);
+    ACkey.addEventListener('click', reset);
+    CEkey.addEventListener('click', cancelLastOperation);
 
     const isLastKeyAnOperator = string => string.match(operatorRegExp);
 
-    function reset(element) {
-        element.innerText = '0';
+    function reset() {
+        mainDisplay.innerText = '0';
+        subDisplay.innerText = '0';
+    }
+
+    function cancelLastOperation() {
+        const lastOperationRegex = /[0-9]+$|[+\-x:]$/;
+        mainDisplay.innerText = '0';
+        subDisplay.innerText = subDisplay.innerText.replace(lastOperationRegex, '');
+        if (!subDisplay.innerText) {subDisplay.innerText = '0'}
     }
 
     function handleEqualKeyPress(e) {
@@ -82,14 +96,14 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
         subDisplay.innerText += this.innerText;
 
         function checkSubDisplay(){
-            if (subDisplay.innerText.includes('=')) {
+            if (subDisplay.innerText.includes('=') || subDisplay.innerText === '0') {
                 mainDisplay.innerText='';
                 subDisplay.innerText='';
             }
         }
 
         function checkMainDisplay(){
-            if (mainDisplay.innerText === '0' || mainDisplay.innerText.match(operatorRegExp)) {
+            if (mainDisplay.innerText === '0' || subDisplay.innerText.match(/[+\-:x]$/)) {
                 mainDisplay.innerText = '';
             }
         }
@@ -99,7 +113,7 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
         checkEqual();
         if (mainDisplay.innerText.match(operatorRegExp)) return;
         
-        mainDisplay.innerText = this.innerText;
+        mainDisplay.innerText = computeTotal(subDisplay.innerText);
         subDisplay.innerText += this.innerText;
         
         function checkEqual() {
