@@ -1,21 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <p id="mainDisplay">0</p>
+    <p id="subDisplay"></p>
+    <div class="key number">1</div>
+    <div class="key number">2</div>
+    <div class="key number">3</div>
+    <div class="key number">4</div>
+    <div class="key number">5</div>
+    <div class="key number">6</div>
+    <div class="key number">7</div>
+    <div class="key number">8</div>
+    <div class="key number">9</div>
+    <div class="key number">0</div>
+    <div class="key operator">+</div>
+    <div class="key operator">-</div>
+    <div class="key operator">:</div>
+    <div class="key operator">x</div>
+    <div class="key equal">=</div>
+
+</body>
+
+
+
 <script>
-const add = x => y => x + y;
+    /*const add = x => y => x + y;
 const multiply = x => y => x * y;
 const substract = x => y => y - x
 const divide = x => y => y / x;
 
 const compose = f => g => f(g);
 
+const operatorToFunc = {
+    '+' : add,
+    '-' : substract,
+    'x' : multiply,
+    ':' : divide
+}
 const operations = [];
 
 operations.push(add(20), substract(1), multiply(2), divide(2));
 
-const compute= array => array.reduce((total, x) => compose(x)(total), 0);
+const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
 
-console.log(compute(operations));
+    const mainDisplay = document.querySelector('#mainDisplay');
+    const subDisplay = document.querySelector('#subDisplay');
+    const numberKeys = document.querySelectorAll('.number');
+    const operatorKeys = document.querySelectorAll('.operator');
+    const equalKey = document.querySelector('.equal');
 
-operations.pop();
+    const operatorRegExp = /[+\-:x]$/;
 
-console.log(compute(operations));
+
+    numberKeys.forEach(x => x.addEventListener('click', handleNumericKeyPress));
+    operatorKeys.forEach(x => x.addEventListener('click', handleOperatorKeyPress));
+    equalKey.addEventListener('click', handleEqualKeyPress);
+
+    const isLastKeyAnOperator = string => string.match(operatorRegExp);
+
+    function reset(element) {
+        element.innerText = '0';
+    }
+
+    function handleEqualKeyPress(e) {
+        const result = computeTotal(subDisplay.innerHTML);
+        mainDisplay.innerText = result;
+        subDisplay.innerText += '=' + result;
+    }
+   
+    function handleNumericKeyPress(e) {
+        checkSubDisplay();
+        checkMainDisplay();
+        mainDisplay.innerText += this.innerText;
+        subDisplay.innerText += this.innerText;
+
+        function checkSubDisplay(){
+            if (subDisplay.innerText.includes('=')) {
+                mainDisplay.innerText='';
+                subDisplay.innerText='';
+            }
+        }
+
+        function checkMainDisplay(){
+            if (mainDisplay.innerText === '0' || mainDisplay.innerText.match(operatorRegExp)) {
+                mainDisplay.innerText = '';
+            }
+        }
+    }
+
+    function handleOperatorKeyPress(e) {
+        checkEqual();
+        if (mainDisplay.innerText.match(operatorRegExp)) return;
+        
+        mainDisplay.innerText = this.innerText;
+        subDisplay.innerText += this.innerText;
+        
+        function checkEqual() {
+            if (subDisplay.innerText.includes('=')){
+                subDisplay.innerText = mainDisplay.innerText;
+                mainDisplay.innerText = '';
+            }
+        }
+    }
+
+    const operationsRegExp = /[+/:\-*]/;
+    const singleOperationRegExp = /[0-9]+[+/:\-*][0-9]+/;
+
+    const replaceOperatorSymbols = str => str.replace(':', '/').replace('x', '*');
+    const removeAdditionalOperatorSymbols = str => str.replace(/[+/:\-*]$/, '');
+    const isMathExpression = str => str.match(operationsRegExp);
+    const evalFirstExpression = str => eval(str.match(singleOperationRegExp)[0]);
+
+    const replaceFirstExpressionWithSubTotal = str => str.replace(singleOperationRegExp, evalFirstExpression(str));
+
+    function computeTotal(str) {
+
+        //check if string is empty or undefined
+        if (!str) return '0';
+
+        //remove final operator symbol if present
+        const cleanString = removeAdditionalOperatorSymbols(replaceOperatorSymbols(str));
+
+        //if there aren't operators left in the string, return the string itself
+        if (!isMathExpression(cleanString)) return cleanString;
+
+        const subTotal = evalFirstExpression(cleanString);
+        const parsedString = cleanString.replace(singleOperationRegExp, subTotal);
+        return computeTotal(parsedString);
+    }
+
+
+/*
+function parseTotal(raw) {
+    const tokens = raw.match(/[0-9]+[+\-:x]/g);
+    const operations = tokens.map(x => parseToken(x));
+    const total = compute(operations);
+}
+
+function parseToken(token) {
+    const number = token.match(/[0-9]+/);
+    const operator = token.match(/[+-:x]/);
+    const operation = operatorToFunc[operator];
+    return operation(number);
+}
+*/
 
 </script>
+
+</html>
