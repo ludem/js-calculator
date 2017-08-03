@@ -2,33 +2,41 @@
 <html>
 
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Press+Start+2P|VT323" rel="stylesheet">
     <style>
         .calculator {
             display: grid;
-            grid-template-columns: repeat(4, 50px);
-            grid-template-areas: 
-            "display display display display" 
-            "ac ce divide multiply" 
-            ". . .  minus" 
-            ". . . plus" 
-            ". . . equal"
-             "zero zero dot equal";
-             
-             justify-content: center;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-areas: "display display display display" "ac ce divide multiply" ". . .  minus" ". . . plus" ". . . equal" "zero zero dot equal";
+            grid-gap: 3vw;
 
+            width: 60vw;
+            height: 90vh;
+            background: silver;
+            border-radius: 5%;
+            padding: 2vw;
         }
 
-        .display{
+        .display {
             grid-area: display;
+            font-family: 'VT323', monospace;
+        }
+
+        .display p {
+            margin: 0;
+        }
+
+        #mainDisplay {
+            font-size: 2rem;
         }
 
         .zero {
             grid-area: zero;
         }
 
-       .dot {
-           grid-area: dot;
-       } 
+        .dot {
+            grid-area: dot;
+        }
 
         .ac {
             grid-area: ac;
@@ -44,8 +52,8 @@
 
         .minus {
             grid-area: minus;
-
         }
+
         .multiply {
             grid-area: multiply;
         }
@@ -57,9 +65,51 @@
         .equal {
             grid-area: equal;
         }
-        
+
         .key {
-            border: 1px solid red;
+            border: 1px solid #ccc;
+            border-bottom: 2px solid #bbb;
+            border-top: 1px solid #ddd;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius:7%;
+            color: cornsilk
+        }
+
+        .number,
+        .dot {
+            background: black;
+        }
+
+        .zero,
+        .equal {
+            border-radius: 7%;
+        }
+
+        .operator{
+            background: gray;
+            font-weight: bolder;
+            color: cornsilk;
+        }
+
+        .equal {
+            background: cornflowerblue;
+        }
+
+        .ce {
+            background: orange;
+        }
+
+        .ac {
+            background: orangered;
+        }
+
+        .display {
+            text-align: right;
         }
     </style>
 </head>
@@ -70,21 +120,21 @@
             <p id="mainDisplay">0</p>
             <p id="subDisplay">0</p>
         </div>
-        <div class="key number">1</div>
-        <div class="key number">2</div>
-        <div class="key number">3</div>
-        <div class="key number">4</div>
-        <div class="key number">5</div>
-        <div class="key number">6</div>
         <div class="key number">7</div>
         <div class="key number">8</div>
         <div class="key number">9</div>
+        <div class="key number">4</div>
+        <div class="key number">5</div>
+        <div class="key number">6</div>
+        <div class="key number">1</div>
+        <div class="key number">2</div>
+        <div class="key number">3</div>
         <div class="key number zero">0</div>
         <div class="key operator plus">+</div>
         <div class="key operator minus">-</div>
         <div class="key operator divide">:</div>
         <div class="key operator multiply">x</div>
-        <div class="key dot">.</div> 
+        <div class="key dot">.</div>
         <div class="key equal">=</div>
         <div class="key ac">AC</div>
         <div class="key ce">CE</div>
@@ -158,7 +208,7 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
 
         //if current value already includes a dot, do nothing
         if (mainDisplay.innerText.includes('.')) return;
-        
+
         /*/if current value is '0' return '0.'
         if (mainDisplay.innerText === '0' ) {
             mainDisplay.innerText = '0.'
