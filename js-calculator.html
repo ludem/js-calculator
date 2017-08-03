@@ -4,19 +4,24 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Orbitron|Oswald" rel="stylesheet">
     <style>
+
+        html {
+            user-select: none;
+        }
         .calculator {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-areas: "header header header header" "display display display display" "ac ce divide multiply" ". . .  minus" ". . . plus" ". . . equal" "zero zero dot equal";
-            grid-gap: 3vw;
+            grid-gap: 0.8rem;
 
-            width: 60vw;
-            height: 90vh;
+            width: 16rem;
+            height: 24rem;
+            max-height: 100%;
             background: silver;
             border-radius: 2%;
             padding: 2vw;
             border: 1px solid gray;
-            box-shadow: 0px 10px 0px 0px gray;
+            box-shadow: 0px 0px 10px 5px gray inset;
         }
 
         .display {
@@ -87,6 +92,10 @@
             color: cornsilk;
             cursor: pointer;
             transition: linear 0.1s box-shadow;
+        }
+
+        .key:hover {
+            opacity: 0.8;
         }
 
         .number,
