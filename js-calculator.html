@@ -7,6 +7,7 @@
 
         html {
             user-select: none;
+            background: darkslategrey;
         }
         .calculator {
             display: grid;
@@ -142,10 +143,27 @@
             font-family: 'Oswald', sans-serif;
             font-weight: bold;
         }
+
+        .title h1 {
+			font-size: 0.7rem;
+			color: silver;
+		}
+
+		.title {
+            font-family: 'Oswald', sans-serif;
+			display: flex;
+			justify-content: flex-start;
+		}
+        .title a{
+            color: gold;
+        }
     </style>
 </head>
 
 <body>
+    <div class=title>
+		<h1>"JS Calculator" by <a href="https://codepen.io/ludem/" target="_tab">ludem</a></h1>
+	</div>
     <div class="calculator">
         <div class="header">JS-Calculator-2000</div>
         <div class="display">
@@ -161,7 +179,7 @@
         <div class="key number">1</div>
         <div class="key number">2</div>
         <div class="key number">3</div>
-        <button class="key number zero">0</button>
+        <div class="key number zero">0</div>
         <div class="key operator plus">+</div>
         <div class="key operator minus">-</div>
         <div class="key operator divide">:</div>
