@@ -230,10 +230,16 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
     const replaceOperatorSymbols = str => str.replace(':', '/').replace('x', '*');
     const removeAdditionalOperatorSymbols = str => str.replace(/[+/:\-*.]$/, '');
     const isMathExpression = str => str.match(singleOperationRegExp);
-    const evalFirstExpression = str => eval(str.match(singleOperationRegExp)[0]);
-
+    const evalFirstExpression = str => eval(str.match(singleOperationRegExp)[0]).toFixed(2);
     const replaceFirstExpressionWithSubTotal = str => str.replace(singleOperationRegExp, evalFirstExpression(str));
     const isLastKeyAnOperator = string => string.match(operatorRegExp);
+    const removeDotZero = string => {
+        var cleanString = string.replace(/[.]0+$/, '');
+        if (cleanString.includes('.')) {
+            cleanString = cleanString.replace(/0+$/, '');
+        }
+        return cleanString;
+        }
 
     function refreshValues() {
         mainDisplay.innerText = currentValue;
@@ -297,7 +303,6 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
         currentExpression = removeAdditionalOperatorSymbols(currentExpression);
         const result = computeTotal(currentExpression);
         if (result.length >= mainDisplayCharLimit) {
-            errorFlag = true;
             showError();
             currentValue = '0';
             currentExpression = '0';
@@ -359,7 +364,7 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
         const cleanString = removeAdditionalOperatorSymbols(replaceOperatorSymbols(str));
 
         //if there aren't operators left in the string, return the string itself
-        if (!isMathExpression(cleanString)) return cleanString;
+        if (!isMathExpression(cleanString)) return removeDotZero(cleanString);
 
         const subTotal = evalFirstExpression(cleanString);
         const parsedString = cleanString.replace(singleOperationRegExp, subTotal);
