@@ -4,11 +4,24 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Orbitron|Oswald" rel="stylesheet">
     <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
 
         html {
             user-select: none;
-            background: darkslategrey;
+            background: cadetblue;
         }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
         .calculator {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -20,7 +33,7 @@
             max-height: 100%;
             background: silver;
             border-radius: 2%;
-            padding: 2vw;
+            padding: 1.5rem;
             border: 1px solid gray;
             box-shadow: 0px 0px 10px 5px gray inset;
         }
@@ -30,7 +43,8 @@
             font-family: 'Orbitron', monospace;
             background: seagreen;
             overflow: hidden;
-            height: 100px;
+            height: auto;
+            padding: 0.2rem;
             box-shadow: 0px 3px 1px 1px darkgreen inset;
         }
 
@@ -41,7 +55,7 @@
 
         #mainDisplay {
             height: 75%;
-            font-size: 8vh;
+            font-size: 2rem;
         }
 
         .zero {
@@ -134,7 +148,6 @@
         .pressed {
             box-shadow: 0px 1px 3px 0px gray;
             transform: translateY(1px);
-            
         }
 
         .header {
@@ -145,16 +158,17 @@
         }
 
         .title h1 {
-			font-size: 0.7rem;
-			color: silver;
-		}
+            font-size: 0.7rem;
+            color: #242424;
+        }
 
-		.title {
+        .title {
             font-family: 'Oswald', sans-serif;
-			display: flex;
-			justify-content: flex-start;
-		}
-        .title a{
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .title a {
             color: gold;
         }
     </style>
@@ -162,8 +176,8 @@
 
 <body>
     <div class=title>
-		<h1>"JS Calculator" by <a href="https://codepen.io/ludem/" target="_tab">ludem</a></h1>
-	</div>
+        <h1>"JS Calculator" by <a href="https://codepen.io/ludem/" target="_tab">ludem</a></h1>
+    </div>
     <div class="calculator">
         <div class="header">JS-Calculator-2000</div>
         <div class="display">
@@ -232,7 +246,7 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
     const mainDisplayCharLimit = 9;
     const subDisplayCharLimit = 16;
 
-    keys.forEach(x => x.addEventListener('click',showPressed));
+    keys.forEach(x => x.addEventListener('click', showPressed));
     keys.forEach(x => x.addEventListener('transitionend', hidePressed));
 
     numberKeys.forEach(x => x.addEventListener('click', handleNumericKeyPress));
@@ -257,7 +271,7 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
             cleanString = cleanString.replace(/0+$/, '');
         }
         return cleanString;
-        }
+    }
 
     function refreshValues() {
         mainDisplay.innerText = currentValue;
@@ -289,7 +303,7 @@ const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
             refreshValues();
             return;
         }
-        
+
         currentExpression = currentExpression.replace(lastOperationRegex, '');
         currentValue = currentExpression.match(/[0-9.]+$/) || '0';
         if (!currentExpression) {
