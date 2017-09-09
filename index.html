@@ -4,7 +4,8 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Orbitron|Oswald" rel="stylesheet">
     <style>
-        html, body {
+        html,
+        body {
             padding: 0;
             margin: 0;
             height: 100%;
@@ -13,6 +14,13 @@
         html {
             user-select: none;
             background: cadetblue;
+            font-size: 3vmin;
+        }
+
+        @media screen and (orientation: portrait) {
+            html {
+                font-size: 3vmax;
+            }
         }
 
         body {
@@ -28,10 +36,9 @@
             grid-template-areas: "header header header header" "display display display display" "ac ce divide multiply" ". . .  minus" ". . . plus" ". . . equal" "zero zero dot equal";
             grid-gap: 0.8rem;
 
-            width: 13rem;
-            height: 24rem;
+            width: 50vh;
+            height: 70vh;
             max-height: 100%;
-            min-height: 70%;
             background: silver;
             border-radius: 2%;
             padding: 1.5rem;
