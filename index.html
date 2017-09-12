@@ -4,7 +4,8 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Orbitron|Oswald" rel="stylesheet">
     <style>
-        html, body {
+        html,
+        body {
             padding: 0;
             margin: 0;
             height: 100%;
@@ -203,206 +204,202 @@
         <div class="key ac">AC</div>
         <div class="key ce">CE</div>
     </div>
-</body>
-
-
-
-<script>
-    /*const add = x => y => x + y;
-const multiply = x => y => x * y;
-const substract = x => y => y - x
-const divide = x => y => y / x;
-
-const compose = f => g => f(g);
-
-const operatorToFunc = {
-    '+' : add,
-    '-' : substract,
-    'x' : multiply,
-    ':' : divide
-}
-const operations = [];
-
-operations.push(add(20), substract(1), multiply(2), divide(2));
-
-const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
-    var currentExpression = '0';
-    var currentValue = '0';
-
-    const mainDisplay = document.querySelector('#mainDisplay');
-    const subDisplay = document.querySelector('#subDisplay');
-    const keys = document.querySelectorAll('.key');
-    const numberKeys = document.querySelectorAll('.number');
-    const operatorKeys = document.querySelectorAll('.operator');
-    const equalKey = document.querySelector('.equal');
-    const ACkey = document.querySelector('.ac');
-    const CEkey = document.querySelector('.ce');
-    const dot = document.querySelector('.dot');
-
-    const operatorRegExp = /[+\-:x]$/;
-    const lastOperationRegex = /[0-9.]+$|[+\-x:]$/;
-
-    const errorMessage = "TOO MANY DIGITS";
-    const mainDisplayCharLimit = 9;
-    const subDisplayCharLimit = 16;
-
-    keys.forEach(x => x.addEventListener('click', showPressed));
-    keys.forEach(x => x.addEventListener('transitionend', hidePressed));
-
-    numberKeys.forEach(x => x.addEventListener('click', handleNumericKeyPress));
-    operatorKeys.forEach(x => x.addEventListener('click', handleOperatorKeyPress));
-    equalKey.addEventListener('click', handleEqualKeyPress);
-    ACkey.addEventListener('click', reset);
-    CEkey.addEventListener('click', cancelLastOperation);
-    dot.addEventListener('click', handleDotKeyPress);
-
-    const operationsRegExp = /[+/:\-*]/;
-    const singleOperationRegExp = /[\-0-9.]+[+/:\-*][0-9.]+/;
-
-    const replaceOperatorSymbols = str => str.replace(':', '/').replace('x', '*');
-    const removeAdditionalOperatorSymbols = str => str.replace(/[+/:\-*.]$/, '');
-    const isMathExpression = str => str.match(singleOperationRegExp);
-    const evalFirstExpression = str => eval(str.match(singleOperationRegExp)[0]).toFixed(2);
-    const replaceFirstExpressionWithSubTotal = str => str.replace(singleOperationRegExp, evalFirstExpression(str));
-    const isLastKeyAnOperator = string => string.match(operatorRegExp);
-    const removeDotZero = string => {
-        var cleanString = string.replace(/[.]0+$/, '');
-        if (cleanString.includes('.')) {
-            cleanString = cleanString.replace(/0+$/, '');
-        }
-        return cleanString;
+    <script>
+        /*const add = x => y => x + y;
+    const multiply = x => y => x * y;
+    const substract = x => y => y - x
+    const divide = x => y => y / x;
+    
+    const compose = f => g => f(g);
+    
+    const operatorToFunc = {
+        '+' : add,
+        '-' : substract,
+        'x' : multiply,
+        ':' : divide
     }
+    const operations = [];
+    
+    operations.push(add(20), substract(1), multiply(2), divide(2));
+    
+    const compute = array => array.reduce((total, x) => compose(x)(total), 0);*/
+        var currentExpression = '0';
+        var currentValue = '0';
 
-    function refreshValues() {
-        mainDisplay.innerText = currentValue;
-        subDisplay.innerText = currentExpression.substr(-subDisplayCharLimit);
-    }
+        const mainDisplay = document.querySelector('#mainDisplay');
+        const subDisplay = document.querySelector('#subDisplay');
+        const keys = Array.from(document.querySelectorAll('.key'));
+        const numberKeys = Array.from(document.querySelectorAll('.number'));
+        const operatorKeys = Array.from(document.querySelectorAll('.operator'));
+        const equalKey = document.querySelector('.equal');
+        const ACkey = document.querySelector('.ac');
+        const CEkey = document.querySelector('.ce');
+        const dot = document.querySelector('.dot');
 
-    function showPressed() {
-        this.classList.add('pressed');
-    }
+        const operatorRegExp = /[+\-:x]$/;
+        const lastOperationRegex = /[0-9.]+$|[+\-x:]$/;
 
-    function hidePressed(e) {
-        console.log(e);
-        this.classList.remove('pressed');
-    }
+        const errorMessage = "TOO MANY DIGITS";
+        const mainDisplayCharLimit = 9;
+        const subDisplayCharLimit = 16;
 
-    function reset() {
-        currentValue = '0';
-        currentExpression = '0';
-        refreshValues();
-    }
+        keys.forEach(x => x.addEventListener('click', showPressed));
+        keys.forEach(x => x.addEventListener('transitionend', hidePressed));
 
+        numberKeys.forEach(x => x.addEventListener('click', handleNumericKeyPress));
+        operatorKeys.forEach(x => x.addEventListener('click', handleOperatorKeyPress));
+        equalKey.addEventListener('click', handleEqualKeyPress);
+        ACkey.addEventListener('click', reset);
+        CEkey.addEventListener('click', cancelLastOperation);
+        dot.addEventListener('click', handleDotKeyPress);
 
-    function cancelLastOperation() {
+        const operationsRegExp = /[+/:\-*]/;
+        const singleOperationRegExp = /[\-0-9.]+[+/:\-*][0-9.]+/;
 
-        //if equal is present, reset to the full expression before the equal
-        if (currentExpression.includes('=')) {
-            currentExpression = currentExpression.split('=')[0];
-            currentValue = currentExpression.match(/[0-9.]+$/) || '0';
-            refreshValues();
-            return;
+        const replaceOperatorSymbols = str => str.replace(':', '/').replace('x', '*');
+        const removeAdditionalOperatorSymbols = str => str.replace(/[+/:\-*.]$/, '');
+        const isMathExpression = str => str.match(singleOperationRegExp);
+        const evalFirstExpression = str => eval(str.match(singleOperationRegExp)[0]).toFixed(2);
+        const replaceFirstExpressionWithSubTotal = str => str.replace(singleOperationRegExp, evalFirstExpression(str));
+        const isLastKeyAnOperator = string => string.match(operatorRegExp);
+        const removeDotZero = string => {
+            var cleanString = string.replace(/[.]0+$/, '');
+            if (cleanString.includes('.')) {
+                cleanString = cleanString.replace(/0+$/, '');
+            }
+            return cleanString;
         }
 
-        currentExpression = currentExpression.replace(lastOperationRegex, '');
-        currentValue = currentExpression.match(/[0-9.]+$/) || '0';
-        if (!currentExpression) {
-            currentExpression = '0';
+        function refreshValues() {
+            mainDisplay.innerText = currentValue;
+            subDisplay.innerText = currentExpression.substr(-subDisplayCharLimit);
         }
-        refreshValues();
-    }
 
-    function handleDotKeyPress() {
+        function showPressed() {
+            this.classList.add('pressed');
+        }
 
-        //if last pressed key is an operator, do nothing
-        if (isLastKeyAnOperator(currentExpression)) return;
+        function hidePressed(e) {
+            console.log(e);
+            this.classList.remove('pressed');
+        }
 
-        //if current value already includes a dot, do nothing
-        if (currentValue.includes('.')) return;
-
-        currentValue += '.';
-        currentExpression += '.';
-        refreshValues();
-    }
-
-    function showError() {
-        mainDisplay.innerHTML = "ERROR";
-        subDisplay.innerHTML = errorMessage;
-    }
-
-    function handleEqualKeyPress(e) {
-        if (currentExpression === '0') return;
-        currentExpression = removeAdditionalOperatorSymbols(currentExpression);
-        const result = computeTotal(currentExpression);
-        if (result.length >= mainDisplayCharLimit) {
-            showError();
+        function reset() {
             currentValue = '0';
             currentExpression = '0';
-            return;
-        }
-        currentValue = result;
-        currentExpression += '=' + result;
-        refreshValues();
-    }
-
-    function handleNumericKeyPress(e) {
-        if (currentValue.length == mainDisplayCharLimit) return;
-        checkSubDisplay();
-        checkMainDisplay();
-        currentValue += this.innerText;
-        currentExpression += this.innerText;
-        refreshValues();
-
-        function checkSubDisplay() {
-            if (currentExpression.includes('=') || currentExpression === '0') {
-                currentValue = '';
-                currentExpression = '';
-            }
+            refreshValues();
         }
 
-        function checkMainDisplay() {
-            if (currentValue === '0' || currentExpression.match(/[+\-:x]$/)) {
-                currentValue = '';
-                refreshValues();
-            }
-        }
-    }
 
-    function handleOperatorKeyPress(e) {
-        checkEqual();
-        if (currentExpression.match(operatorRegExp) || currentExpression === '0') return;
+        function cancelLastOperation() {
 
-        currentValue = computeTotal(currentExpression);
-        currentExpression += this.innerText;
-        refreshValues();
-
-        function checkEqual() {
+            //if equal is present, reset to the full expression before the equal
             if (currentExpression.includes('=')) {
-                currentExpression = currentValue;
-                currentValue = '';
+                currentExpression = currentExpression.split('=')[0];
+                currentValue = currentExpression.match(/[0-9.]+$/) || '0';
                 refreshValues();
+                return;
+            }
+
+            currentExpression = currentExpression.replace(lastOperationRegex, '');
+            currentValue = currentExpression.match(/[0-9.]+$/) || '0';
+            if (!currentExpression) {
+                currentExpression = '0';
+            }
+            refreshValues();
+        }
+
+        function handleDotKeyPress() {
+
+            //if last pressed key is an operator, do nothing
+            if (isLastKeyAnOperator(currentExpression)) return;
+
+            //if current value already includes a dot, do nothing
+            if (currentValue.includes('.')) return;
+
+            currentValue += '.';
+            currentExpression += '.';
+            refreshValues();
+        }
+
+        function showError() {
+            mainDisplay.innerHTML = "ERROR";
+            subDisplay.innerHTML = errorMessage;
+        }
+
+        function handleEqualKeyPress(e) {
+            if (currentExpression === '0') return;
+            currentExpression = removeAdditionalOperatorSymbols(currentExpression);
+            const result = computeTotal(currentExpression);
+            if (result.length >= mainDisplayCharLimit) {
+                showError();
+                currentValue = '0';
+                currentExpression = '0';
+                return;
+            }
+            currentValue = result;
+            currentExpression += '=' + result;
+            refreshValues();
+        }
+
+        function handleNumericKeyPress(e) {
+            if (currentValue.length == mainDisplayCharLimit) return;
+            checkSubDisplay();
+            checkMainDisplay();
+            currentValue += this.innerText;
+            currentExpression += this.innerText;
+            refreshValues();
+
+            function checkSubDisplay() {
+                if (currentExpression.includes('=') || currentExpression === '0') {
+                    currentValue = '';
+                    currentExpression = '';
+                }
+            }
+
+            function checkMainDisplay() {
+                if (currentValue === '0' || currentExpression.match(/[+\-:x]$/)) {
+                    currentValue = '';
+                    refreshValues();
+                }
             }
         }
-    }
+
+        function handleOperatorKeyPress(e) {
+            checkEqual();
+            if (currentExpression.match(operatorRegExp) || currentExpression === '0') return;
+
+            currentValue = computeTotal(currentExpression);
+            currentExpression += this.innerText;
+            refreshValues();
+
+            function checkEqual() {
+                if (currentExpression.includes('=')) {
+                    currentExpression = currentValue;
+                    currentValue = '';
+                    refreshValues();
+                }
+            }
+        }
 
 
 
-    function computeTotal(str) {
+        function computeTotal(str) {
 
-        //check if string is empty or undefined
-        if (!str) return '0';
+            //check if string is empty or undefined
+            if (!str) return '0';
 
-        //remove final operator symbol if present
-        const cleanString = removeAdditionalOperatorSymbols(replaceOperatorSymbols(str));
+            //remove final operator symbol if present
+            const cleanString = removeAdditionalOperatorSymbols(replaceOperatorSymbols(str));
 
-        //if there aren't operators left in the string, return the string itself
-        if (!isMathExpression(cleanString)) return removeDotZero(cleanString);
+            //if there aren't operators left in the string, return the string itself
+            if (!isMathExpression(cleanString)) return removeDotZero(cleanString);
 
-        const subTotal = evalFirstExpression(cleanString);
-        const parsedString = cleanString.replace(singleOperationRegExp, subTotal);
-        return computeTotal(parsedString);
-    }
-
-</script>
+            const subTotal = evalFirstExpression(cleanString);
+            const parsedString = cleanString.replace(singleOperationRegExp, subTotal);
+            return computeTotal(parsedString);
+        }
+    </script>
+</body>
 
 </html>
